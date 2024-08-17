@@ -31,10 +31,8 @@ public class EscucharEntrevistaActivity extends AppCompatActivity {
         imageViewEntrevista = findViewById(R.id.imageViewEntrevista);
         buttonReproducirAudio = findViewById(R.id.buttonReproducirAudio);
 
-        // Recibir la entrevista desde el Intent
         Entrevista entrevista = (Entrevista) getIntent().getSerializableExtra("Entrevista");
 
-        // Cargar la imagen de Firebase Storage
         if (entrevista != null) {
             cargarImagen(entrevista.getImagenUrl());
             configurarReproduccionAudio(entrevista.getAudioUrl());
@@ -49,7 +47,6 @@ public class EscucharEntrevistaActivity extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReferenceFromUrl(imagenUrl);
 
-        // Cargar imagen usando Glide
         Glide.with(this)
                 .load(storageReference)
                 .into(imageViewEntrevista);
@@ -63,9 +60,9 @@ public class EscucharEntrevistaActivity extends AppCompatActivity {
             mediaPlayer.setOnPreparedListener(mp -> buttonReproducirAudio.setEnabled(true));
             mediaPlayer.setOnCompletionListener(mp -> {
                 buttonReproducirAudio.setText("Reproducir Audio");
-                mediaPlayer.seekTo(0);  // Opcional: volver al inicio del audio
+                mediaPlayer.seekTo(0);
             });
-            mediaPlayer.prepareAsync(); // Preparar el MediaPlayer de manera asíncrona
+            mediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "Error al cargar el audio", Toast.LENGTH_SHORT).show();
@@ -86,7 +83,7 @@ public class EscucharEntrevistaActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (mediaPlayer != null) {
-            mediaPlayer.release(); // Liberar el MediaPlayer cuando la actividad se destruye
+            mediaPlayer.release();
             mediaPlayer = null;
         }
     }

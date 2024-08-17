@@ -77,11 +77,9 @@ public class IngresarEntrevistaActivity extends AppCompatActivity {
         firebaseAppCheck.installAppCheckProviderFactory(
                 PlayIntegrityAppCheckProviderFactory.getInstance());
 
-        // Inicializar referencias de Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference("Entrevistas");
         storageReference = FirebaseStorage.getInstance().getReference("Entrevistas");
 
-        // Inicializar vistas
         etDescripcion = findViewById(R.id.etDescripcion);
         etPeriodista = findViewById(R.id.etPeriodista);
         etFecha = findViewById(R.id.etFecha);
@@ -92,13 +90,11 @@ public class IngresarEntrevistaActivity extends AppCompatActivity {
         btnGrabarAudio = findViewById(R.id.btnGrabarAudio);
         btnGuardarEntrevista = findViewById(R.id.btnGuardarEntrevista);
 
-        // Configurar listeners de botones
         btnSeleccionarImagen.setOnClickListener(v -> mostrarDialogoSeleccionImagen());
         btnSeleccionarAudio.setOnClickListener(v -> seleccionarAudio());
         btnGrabarAudio.setOnClickListener(v -> checkAudioPermission());
         btnGuardarEntrevista.setOnClickListener(v -> guardarEntrevista());
 
-        // Configurar el campo de fecha para que acepte el formato YYYY-MM-DD
         etFecha.addTextChangedListener(new TextWatcher() {
             private String current = "";
             private String yyyymmdd = "YYYYMMDD";
@@ -118,7 +114,6 @@ public class IngresarEntrevistaActivity extends AppCompatActivity {
                     for (int i = 2; i <= cl && i < 6; i += 2) {
                         sel++;
                     }
-                    // Fix for pressing delete next to a forward slash
                     if (clean.equals(cleanC)) sel--;
 
                     if (clean.length() < 8) {
@@ -197,16 +192,13 @@ public class IngresarEntrevistaActivity extends AppCompatActivity {
 
     private void iniciarGrabacionAudio() {
         try {
-            // Definir la ruta donde se guardará el archivo de audio
             audioFilePath = getExternalCacheDir().getAbsolutePath() + "/entrevista_audio.3gp";
             File audioFile = new File(audioFilePath);
 
-            // Verificar si el archivo ya existe y eliminarlo si es necesario
             if (audioFile.exists()) {
                 audioFile.delete();
             }
 
-            // Crear un nuevo archivo
             audioFile.createNewFile();
 
             mediaRecorder = new MediaRecorder();
@@ -218,7 +210,6 @@ public class IngresarEntrevistaActivity extends AppCompatActivity {
             mediaRecorder.start();
             establecerFechaActual();
 
-            // Mostrar pantalla de grabación
             Intent intent = new Intent(this, PantallaGrabacionAudioActivity.class);
             intent.putExtra("audioFilePath", audioFilePath);
             startActivity(intent);
@@ -331,7 +322,6 @@ public class IngresarEntrevistaActivity extends AppCompatActivity {
 
         final int idOrden = (int) (System.currentTimeMillis() % 100000);
 
-        // Subir imagen a Firebase Storage
         StorageReference imagenRef = storageReference.child(idOrden + "/imagen.jpg");
         imagenRef.putFile(imagenUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -347,7 +337,6 @@ public class IngresarEntrevistaActivity extends AppCompatActivity {
                                 audioRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri audioUrl) {
-                                        // Guardar detalles de la entrevista en la base de datos
                                         String idEntrevista = databaseReference.push().getKey();
                                         Entrevista entrevista = new Entrevista(idEntrevista, descripcion, periodista, fecha, imagenUrl.toString(), audioUrl.toString());
                                         databaseReference.child(idEntrevista).setValue(entrevista)

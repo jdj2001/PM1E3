@@ -28,7 +28,6 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
-// ListaEntrevistasActivity
 public class ListaEntrevistasActivity extends AppCompatActivity {
     private ListView listViewEntrevistas;
     private List<Entrevista> listaEntrevistas;
@@ -77,7 +76,7 @@ public class ListaEntrevistasActivity extends AppCompatActivity {
         String[] opciones = {"Modificar", "Eliminar", "Escuchar"};
         builder.setItems(opciones, (dialog, which) -> {
             switch (which) {
-                case 0: // Modificar
+                case 0:
                     if (entrevista != null) {
                         Intent modificarIntent = new Intent(ListaEntrevistasActivity.this, ModificarEntrevistaActivity.class);
                         modificarIntent.putExtra("EntrevistaId", entrevista.getIdOrden()); // Usa el ID en lugar del objeto
@@ -86,10 +85,10 @@ public class ListaEntrevistasActivity extends AppCompatActivity {
                         Toast.makeText(ListaEntrevistasActivity.this, "Entrevista no válida", Toast.LENGTH_SHORT).show();
                     }
                     break;
-                case 1: // Eliminar
+                case 1:
                     eliminarEntrevista(entrevista);
                     break;
-                case 2: // Escuchar
+                case 2:
                     Intent escucharIntent = new Intent(ListaEntrevistasActivity.this, EscucharEntrevistaActivity.class);
                     escucharIntent.putExtra("Entrevista", entrevista);
                     startActivity(escucharIntent);
@@ -109,18 +108,15 @@ public class ListaEntrevistasActivity extends AppCompatActivity {
             Toast.makeText(ListaEntrevistasActivity.this, "Error al eliminar la entrevista", Toast.LENGTH_SHORT).show();
         });
 
-        // También se debe eliminar el archivo de imagen y audio de Firebase Storage
         StorageReference imagenRef = FirebaseStorage.getInstance().getReferenceFromUrl(entrevista.getImagenUrl());
         StorageReference audioRef = FirebaseStorage.getInstance().getReferenceFromUrl(entrevista.getAudioUrl());
 
         imagenRef.delete().addOnSuccessListener(aVoid -> {
-            // Imagen eliminada
         }).addOnFailureListener(e -> {
             Toast.makeText(ListaEntrevistasActivity.this, "Error al eliminar la imagen", Toast.LENGTH_SHORT).show();
         });
 
         audioRef.delete().addOnSuccessListener(aVoid -> {
-            // Audio eliminado
         }).addOnFailureListener(e -> {
             Toast.makeText(ListaEntrevistasActivity.this, "Error al eliminar el audio", Toast.LENGTH_SHORT).show();
         });

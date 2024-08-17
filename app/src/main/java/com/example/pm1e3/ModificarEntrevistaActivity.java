@@ -57,19 +57,17 @@ public class ModificarEntrevistaActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private Button btnSeleccionarImagen, btnSeleccionarAudio, btnGrabarAudio, btnGuardarEntrevista;
     private String entrevistaId;
-    private String fechaOriginal;  // Para comparar si la fecha ha cambiado
-    private Entrevista entrevista;
+    private String fechaOriginal;
+0    private Entrevista entrevista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modificar_entrevista);
 
-        // Inicializar referencias de Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference("Entrevistas");
         storageReference = FirebaseStorage.getInstance().getReference("Entrevistas");
 
-        // Inicializar vistas
         etDescripcion = findViewById(R.id.etDescripcion);
         etPeriodista = findViewById(R.id.etPeriodista);
         etFecha = findViewById(R.id.etFecha);
@@ -79,23 +77,20 @@ public class ModificarEntrevistaActivity extends AppCompatActivity {
         btnGrabarAudio = findViewById(R.id.btnGrabarAudio);
         btnGuardarEntrevista = findViewById(R.id.btnGuardarEntrevista);
 
-        // Obtener el ID de la entrevista desde el Intent
-        entrevistaId = getIntent().getStringExtra("EntrevistaId"); // Cambia a EntrevistaId
+        entrevistaId = getIntent().getStringExtra("EntrevistaId");
 
         if (entrevistaId != null && !entrevistaId.isEmpty()) {
             cargarEntrevista(entrevistaId);
         } else {
             Toast.makeText(this, "ID de entrevista no válido", Toast.LENGTH_SHORT).show();
-            finish(); // Cierra la actividad si el ID no es válido
+            finish();
         }
 
-        // Configurar listeners de botones
         btnSeleccionarImagen.setOnClickListener(v -> mostrarDialogoSeleccionImagen());
         btnSeleccionarAudio.setOnClickListener(v -> seleccionarAudio());
         btnGrabarAudio.setOnClickListener(v -> checkAudioPermission());
         btnGuardarEntrevista.setOnClickListener(v -> guardarEntrevista());
 
-        // Establecer el campo de fecha como no editable
         etFecha.setEnabled(false);
     }
 
@@ -109,7 +104,7 @@ public class ModificarEntrevistaActivity extends AppCompatActivity {
                         etDescripcion.setText(entrevista.getDescripcion());
                         etPeriodista.setText(entrevista.getPeriodista());
                         etFecha.setText(entrevista.getFecha());
-                        fechaOriginal = entrevista.getFecha(); // Guardar fecha original
+                        fechaOriginal = entrevista.getFecha();
 
                         Glide.with(ModificarEntrevistaActivity.this)
                                 .load(entrevista.getImagenUrl())
@@ -259,7 +254,6 @@ public class ModificarEntrevistaActivity extends AppCompatActivity {
             return;
         }
 
-        // Subir imagen a Firebase Storage
         StorageReference imagenRef = storageReference.child(entrevistaId + "/imagen.jpg");
         imagenRef.putFile(imagenUri).addOnSuccessListener(taskSnapshot -> {
             imagenRef.getDownloadUrl().addOnSuccessListener(imagenUrl -> {
@@ -267,7 +261,6 @@ public class ModificarEntrevistaActivity extends AppCompatActivity {
                 StorageReference audioRef = storageReference.child(entrevistaId + "/audio.mp3");
                 audioRef.putFile(audioUri).addOnSuccessListener(taskSnapshot1 -> {
                     audioRef.getDownloadUrl().addOnSuccessListener(audioUrl -> {
-                        // Guardar detalles de la entrevista en la base de datos
                         Entrevista entrevista = new Entrevista(entrevistaId, descripcion, periodista, fecha, imagenUrl.toString(), audioUrl.toString());
                         databaseReference.child(entrevistaId).setValue(entrevista)
                                 .addOnCompleteListener(task -> {

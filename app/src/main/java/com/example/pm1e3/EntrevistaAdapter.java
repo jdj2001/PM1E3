@@ -44,7 +44,6 @@ public class EntrevistaAdapter extends ArrayAdapter<Entrevista> {
         Entrevista entrevista = listaEntrevistas.get(position);
         textViewDescripcion.setText(entrevista.getDescripcion());
 
-        // Cargar imagen con Glide o Picasso
         Glide.with(context).load(entrevista.getImagenUrl()).into(imageViewEntrevista);
 
         return listViewItem;

@@ -76,19 +76,17 @@ public class PantallaGrabacionAudioActivity extends AppCompatActivity {
             mediaRecorder = null;
             tvEstadoGrabacion.setText("Grabación finalizada");
 
-            // Verifica la existencia del archivo de audio
             File audioFile = new File(audioFilePath);
             if (audioFile.exists()) {
                 Log.d("DEBUG", "Archivo de audio guardado en: " + audioFilePath);
 
-                // Devolver el resultado a la actividad principal
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("audioFilePath", audioFilePath);
                 setResult(RESULT_OK, resultIntent);
                 finish();
 
                 /*Intent resultIntent = new Intent();
-                resultIntent.setData(Uri.fromFile(audioFile)); // Enviar URI del archivo
+                resultIntent.setData(Uri.fromFile(audioFile));
                 setResult(RESULT_OK, resultIntent);
                 finish();*/
             } else {
