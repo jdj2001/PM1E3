@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "372971398902",
+    "project_id": "entrevista-dc407",
+    "storage_bucket": "entrevista-dc407.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372971398902:android:5d9f05da65f37b1f8f2ed7",
+        "android_client_info": {
+          "package_name": "com.example.pm1e3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE8WiMJZp1AGZ8XWvkGJwFXlQ3pZ-CDj8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
