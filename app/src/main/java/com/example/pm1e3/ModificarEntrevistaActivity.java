@@ -58,7 +58,7 @@ public class ModificarEntrevistaActivity extends AppCompatActivity {
     private Button btnSeleccionarImagen, btnSeleccionarAudio, btnGrabarAudio, btnGuardarEntrevista;
     private String entrevistaId;
     private String fechaOriginal;
-0    private Entrevista entrevista;
+    private Entrevista entrevista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
